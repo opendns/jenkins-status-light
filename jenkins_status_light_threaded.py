@@ -1,17 +1,11 @@
 #!/usr/bin/env python
 
-import colorsys
-import json
 import optparse
-import os
-import pprint
-import random
 import shutil
 import signal
 import sys
 import threading
 import time
-import traceback
 import Queue
 
 from jenkinsapi.jenkins import Jenkins
@@ -64,7 +58,7 @@ class FailurePattern(threading.Thread):
 
             if currently_building == False:
                 if previous_build_status == 'FAILURE':
-                    self.led.fill(failure_base_color)
+                    self.led.fill(failed_base_color)
                     self.led.update()
             time.sleep(.1)
 
@@ -125,6 +119,7 @@ class BuildingPattern(threading.Thread):
 
 
 class JenkinsStatus(threading.Thread):
+    """Queries the status of Jenkins"""
     def __init__(self, job, queue):
         self.job = job
         self.queue = queue
@@ -133,7 +128,6 @@ class JenkinsStatus(threading.Thread):
     def run(self):
 
         while True:
-
             # Determine last completed build
             previous_build = self.job.get_last_completed_build()
             previous_build_status = previous_build.get_status()
@@ -143,7 +137,6 @@ class JenkinsStatus(threading.Thread):
 
             # Add jenkins statuses to the queue
             self.queue.put((previous_build_status, currently_building))
-
             time.sleep(.1)
 
 
