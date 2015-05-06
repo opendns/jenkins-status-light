@@ -164,13 +164,7 @@ def main():
     led.all_off()
     led.update()
 
-    # Override ctrl-c to kill threads
-    queue = Queue.Queue()
-
     jenkins_status = JenkinsStatus(job, queue)
-
-    led_patterns = LedPatterns(queue)
-
     success_pattern = SuccessPattern(queue)
     building_pattern = BuildingPattern(queue)
     failure_pattern = FailurePattern(queue)
@@ -193,5 +187,6 @@ def main():
     aborted_pattern.start()
 
 if __name__ == "__main__":
+    # Override ctrl-c to kill threads
     signal.signal(signal.SIGINT, ctrlc)
     main()
