@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 import optparse
-import shutil
 import signal
 import sys
 import threading
 import time
 import Queue
+import shutil
 
 from jenkinsapi.jenkins import Jenkins
 from bibliopixel.animation import BaseStripAnim
@@ -20,7 +20,6 @@ driver = DriverLPD8806(74, c_order=ChannelOrder.GRB, SPISpeed=2)
 led = LEDStrip(driver)
 
 # Global colors
-failure_colors = [colors.Red, colors.DarkRed]
 failed_base_color = colors.Red
 success_base_color = colors.Green
 aborted_base_color = colors.SlateGray
@@ -60,7 +59,7 @@ class FailurePattern(threading.Thread):
                 if previous_build_status == 'FAILURE':
                     self.led.fill(failed_base_color)
                     self.led.update()
-            time.sleep(.1)
+            time.sleep(.5)
 
 
 class SuccessPattern(threading.Thread):
@@ -79,7 +78,7 @@ class SuccessPattern(threading.Thread):
                 if previous_build_status == 'SUCCESS':
                     self.led.fill(success_base_color)
                     self.led.update()
-            time.sleep(.1)
+            time.sleep(.5)
 
 class AbortedPattern(threading.Thread):
     """Aborted not building Pattern"""
@@ -97,7 +96,7 @@ class AbortedPattern(threading.Thread):
                 if previous_build_status == 'ABORTED':
                     self.led.fill(aborted_base_color)
                     self.led.update()
-            time.sleep(.1)
+            time.sleep(.5)
 
 
 class BuildingPattern(threading.Thread):
@@ -115,7 +114,7 @@ class BuildingPattern(threading.Thread):
             if currently_building == True:
                 self.led.fill(building_color)
                 self.led.update()
-            time.sleep(.1)
+            time.sleep(.5)
 
 
 class JenkinsStatus(threading.Thread):
