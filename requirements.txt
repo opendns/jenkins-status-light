@@ -1,4 +1,4 @@
-BiblioPixel==1.1.7
+BiblioPixel>=1.1.7
 RPi.GPIO==0.5.11
 jenkinsapi==0.2.27
 pyserial==2.7
